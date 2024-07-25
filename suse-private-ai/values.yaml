@@ -20,7 +20,8 @@ ollama:
       type: 'nvidia'
       number: 1
       nvidiaResource: "nvidia.com/gpu"
-    models: []
+    models:
+    - "gemma:2b"
     insecure: false
     mountPath: ""
   serviceAccount:
@@ -95,6 +96,7 @@ ollama:
   hostIPC: false
   hostPID: false
   hostNetwork: false
+  defaultModel: "gemma:2b"
 
 
 # open-webui values
@@ -128,7 +130,7 @@ open-webui:
     existingSecret: ""
   persistence:
     enabled: true
-    size: 2Gi
+    size: 6Gi
     existingClaim: ""
     accessModes:
     - ReadWriteOnce
