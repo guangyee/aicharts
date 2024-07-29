@@ -1,0 +1,13 @@
+dependencies:
+- name: ollama
+  version: 0.46.0
+  repository: https://otwld.github.io/ollama-helm/ #MIT License
+  tags:
+  - ai
+  - ollama
+- name: "open-webui"
+  version: 3.1.0
+  repository: https://helm.openwebui.com/ #MIT License
+  tags:
+  - ai
+  - open-webui
