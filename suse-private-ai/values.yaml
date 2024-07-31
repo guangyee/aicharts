@@ -1,3 +1,22 @@
+# Global section
+global:
+  tls:
+    # options: suse-private-ai, letsEncrypt, secret
+    source: suse-private-ai
+    issuerName: suse-private-ai
+
+    # This section to be filled out when using letsEncrypt as the tls source
+    letsEncrypt:
+      environment: staging
+      email: none@example.com
+      ingress:
+        class: ""
+
+    # Additional Trusted CAs.
+    # Enable this flag and add your CA certs as a secret named tls-ca-additional in the suse-private-ai namespace.
+    additionalTrustedCAs: false
+
+
 # Ollama values
 ollama:
   replicaCount: 1
@@ -40,7 +59,7 @@ ollama:
     nodePort: 31434
     annotations: {}
   ingress:
-    enabled: true
+    enabled: false # Ollama will not be publicly accessible as the ollama API endpoint is not protected via auth yet
     className: ""
     annotations: {}
     hosts:
@@ -97,21 +116,39 @@ ollama:
   hostPID: false
   hostNetwork: false
   defaultModel: "gemma:2b"
-
+  models:
+  - "gemma:2b"
 
 # open-webui values
 open-webui:
   nameOverride: ""
   ollama:
-    enabled: false
+    enabled: false #Disable as we install ollama seperately
     fullnameOverride: "open-webui-ollama"
+    ingress:
+      enabled: false
+      className: ""
+      hosts:
+      - host: suse-ollama-local
+        paths:
+        - path: /
+          pathType: Prefix
+      tls: []
   pipelines:
     enabled: true
     extraEnvVars: []
     persistence:
-      enabled: true
+      enabled: false
       storageClass: ""
-  ollamaUrls: []
+    ingress:
+      enabled: false #Disabled - pipeline endpoint is internal
+      class: ""
+      annotations: {}
+      host: ""
+      tls: false
+      existingSecret: ""
+  ollamaUrls:
+  - http://suse-private-ai-ollama.suse-private-ai.svc.cluster.local:11434
   clusterDomain: cluster.local
   annotations: {}
   podAnnotations: {}
@@ -124,12 +161,13 @@ open-webui:
   ingress:
     enabled: true
     class: ""
-    annotations: {}
-    host: "suse-ollama-webui"
-    tls: false
-    existingSecret: ""
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    host: suse-ollama-webui
+    tls: true
+    existingSecret: suse-private-ai-tls
   persistence:
-    enabled: true
+    enabled: false
     size: 6Gi
     existingClaim: ""
     accessModes:
