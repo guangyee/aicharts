@@ -7,6 +7,6 @@ helm:
   force: false
   valuesFrom:
     - configMapKeyRef:
-      name: suse-private-ai-values
-      namespace: suse-private-ai
-      key: values.yaml
+        name: suse-private-ai-values
+        namespace: suse-private-ai
+        key: values.yaml
