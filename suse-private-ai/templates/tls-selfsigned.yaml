@@ -31,6 +31,41 @@ spec:
     name: {{ .Values.global.tls.issuerName }}-selfsigned
     kind: Issuer
     group: cert-manager.io
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Values.global.tls.issuerName }}
+spec:
+  ca:
+    secretName: {{ .Values.global.tls.issuerName }}-root-secret
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: webui-server-cert
+spec: 
+  isCA: false
+  secretName: webui-server-cert-tls
+  commonName: "{{ index .Values "open-webui.ingress.host" }}"
+  duration: 2160h # 90d
+  renewBefore: 360h
+  subject:
+    organizations:
+    - Suse
+    countries:
+    - US
+    organizationalUnits:
+    - DEV
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ .Values.global.tls.issuerName }}
+    kind: Issuer
+    group: cert-manager.io
   dnsNames:
     - "{{ index .Values "open-webui.ingress.host" }}"
 {{- end -}}
