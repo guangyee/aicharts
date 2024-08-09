@@ -33,13 +33,4 @@ spec:
     group: cert-manager.io
   dnsNames:
     - "{{ index .Values "open-webui.ingress.host" }}"
-
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: {{ .Values.global.tls.issuerName }}
-spec:
-  ca:
-    secretName: {{ .Values.global.tls.issuerName }}-root-secret
 {{- end -}}
