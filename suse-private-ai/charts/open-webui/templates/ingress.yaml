@@ -7,7 +7,7 @@ metadata:
     {{- include "open-webui.labels" . | nindent 4 }}
   annotations:
     {{- if ne .Values.global.tls.source "secret" }}
-    cert-manager.io/issuer: {{ .Values.global.tls.issuerName }}
+    cert-manager.io/issuer: {{ .Values.global.tls.issuerName }}-selfsigned
     cert-manager.io/issuer-kind: Issuer
     {{- end }}
     {{- with .Values.ingress.annotations }}
