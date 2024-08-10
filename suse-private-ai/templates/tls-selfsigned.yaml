@@ -49,7 +49,7 @@ metadata:
 spec: 
   isCA: false
   secretName: webui-server-cert-tls
-  commonName: '{{ index .Values "open-webui" "ingress" "host" }}'
+  commonName: "{{ index .Values "open-webui.ingress.host" }}"
   duration: 2100h
   renewBefore: 360h
   subject:
